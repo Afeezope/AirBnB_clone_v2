@@ -72,13 +72,8 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-<<<<<<< HEAD
                     if (pline[0] == '{') and (pline[-1] == '}')\
                             and (type(eval(pline)) is dict):
-=======
-                    if pline[0] == '{' and pline[-1] == '}'\
-                            and type(eval(pline)) is dict:
->>>>>>> 3027d1e4f9fa1350bf12e53187edf9ef05fce5c2
                         _args = pline
                     else:
                         _args = pline.replace(',', '')
@@ -119,7 +114,6 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-<<<<<<< HEAD
         args = args.split(" ")
         if not args[0]:
             print("** class name missing **")
@@ -131,14 +125,13 @@ class HBNBCommand(cmd.Cmd):
         storage.save()
         new_id = new_instance.id
         print(new_id)
-        storage.save()
+        new_instance.save()
         length = len(args)
         for i in range(1, length):
             new = args[i].partition('=')
             line = f"{args[0]} {new_id} {new[0]} {new[2]}"
             self.do_update(line)
-=======
-        try:
+        """try:
             if not args:
                 raise SyntaxError()
             arg_list = args.split(" ")
@@ -147,16 +140,14 @@ class HBNBCommand(cmd.Cmd):
                 arg_splited = arg.split("=")
                 arg_splited[1] = eval(arg_splited[1])
                 if type(arg_splited[1]) is str:
-                    arg_splited[1] = arg_splited[1].replace("_", " ").replace('"', '\\"')
+                    arg_splited[1] = arg_splited[1].replace\
+                             ("_", " ").replace('"', '\\"')
                 kw[arg_splited[0]] = arg_splited[1]
         except SyntaxError:
             print("** class name missing **")
         except NameError:
             print("** class doesn't exist **")
-        new_instance = HBNBCommand.classes[arg_list[0]](**kw)
-        new_instance.save()
-        print(new_instance.id)
->>>>>>> 3027d1e4f9fa1350bf12e53187edf9ef05fce5c2
+        new_instance = HBNBCommand.classes[arg_list[0]](**kw)"""
 
     def help_create(self):
         """ Help information for the create method """
@@ -351,6 +342,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
