@@ -107,23 +107,23 @@ class test_basemodel(unittest.TestCase):
         new = self.value()
         self.assertEqual(type(new.updated_at), datetime.datetime)
 
-    # Store the original updated_at value
+    # To Store the original updated_at value
         original_updated_at = new.updated_at
 
     # Wait for a small amount of time to ensure the timestamp changes
         import time
         time.sleep(0.1)  # Sleep for 0.1 seconds
 
-    # Update the object
+    # To Update the object
         new.save()
 
-    # Load the object again
+    # To Load the object again
         new = BaseModel(**new.to_dict())
 
-    # Assert that the updated_at attribute has changed
+    # To Assert that the updated_at attribute has changed
         self.assertNotEqual(original_updated_at, new.updated_at)
 
-    # Finally, ensure that the created_at and updated_at timestamps are different
+    # Finally, to ensure that the created_at and updated_at timestamps are different
         self.assertNotEqual(new.created_at, new.updated_at)
 
     def test_uuid(self):
