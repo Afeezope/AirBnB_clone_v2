@@ -14,7 +14,7 @@ class BaseModel:
     """This class will defines all common attributes/methods
     for other classes
     """
-    id = Column(String(60), unique=True, nullable=False, primary_key=True)
+    id = Column(String(60), primary_key=True)
     created_at = Column(DateTime, nullable=False, default=(datetime.utcnow()))
     updated_at = Column(DateTime, nullable=False, default=(datetime.utcnow()))
 
@@ -31,18 +31,20 @@ class BaseModel:
         if kwargs:
             for key, value in kwargs.items():
                 if key == "created_at" or key == "updated_at":
-                    value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
-                if key != "__class__":
+                    value = datetime.fromisoformat(value)
                     setattr(self, key, value)
-            if "id" not in kwargs:
+                elif key != "__class__":
+                    setattr(self, key, value)
+            if "id" not in kwargs.keys():
                 self.id = str(uuid.uuid4())
-            if "created_at" not in kwargs:
-                self.created_at = datetime.now()
-            if "updated_at" not in kwargs:
-                self.updated_at = datetime.now()
+            if "created_at" not in kwargs.keys():
+                self.created_at = datetime.today()
+            if "updated_at" not in kwargs.keys():
+                self.updated_at = datetime.today()
         else:
             self.id = str(uuid.uuid4())
-            self.created_at = self.updated_at = datetime.now()
+            self.created_at = datetime.today()
+            self.updated_at =datetime.today()
 
     def __str__(self):
         """returns a string
@@ -60,7 +62,7 @@ class BaseModel:
     def save(self):
         """updates the public instance attribute updated_at to current
         """
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.today()
         models.storage.new(self)
         models.storage.save()
 

@@ -122,32 +122,21 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.classes[args[0]]()
-        storage.save()
         new_id = new_instance.id
-        print(new_id)
-        new_instance.save()
         length = len(args)
         for i in range(1, length):
             new = args[i].partition('=')
-            line = f"{args[0]} {new_id} {new[0]} {new[2]}"
-            self.do_update(line)
-        """try:
-            if not args:
-                raise SyntaxError()
-            arg_list = args.split(" ")
-            kw = {}
-            for arg in arg_list[1:]:
-                arg_splited = arg.split("=")
-                arg_splited[1] = eval(arg_splited[1])
-                if type(arg_splited[1]) is str:
-                    arg_splited[1] = arg_splited[1].replace\
-                             ("_", " ").replace('"', '\\"')
-                kw[arg_splited[0]] = arg_splited[1]
-        except SyntaxError:
-            print("** class name missing **")
-        except NameError:
-            print("** class doesn't exist **")
-        new_instance = HBNBCommand.classes[arg_list[0]](**kw)"""
+            value = new[2]
+            if value[0] == '"':
+                value = new[2].replace('_', ' ')
+                value = new[2].strip('"')
+            elif '.' in new[2]:
+                value = float(new[2])
+            else:
+                value = int(new[2])
+            setattr(new_instance, new[0], value)
+        new_instance.save()
+        print(new_id)
 
     def help_create(self):
         """ Help information for the create method """
@@ -335,6 +324,7 @@ class HBNBCommand(cmd.Cmd):
                 if isinstance(att_val, str):
                     att_val = att_val.replace('_', ' ')
                 new_dict.__dict__.update({att_name: att_val})
+                print(new_dict.__dict__)
 
         new_dict.save()  # save updates to file
 
