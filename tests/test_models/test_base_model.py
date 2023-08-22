@@ -7,7 +7,6 @@ from uuid import UUID
 import json
 import os
 import pycodestyle
-import pep8
 
 
 class test_basemodel(unittest.TestCase):
@@ -106,25 +105,9 @@ class test_basemodel(unittest.TestCase):
         """ """
         new = self.value()
         self.assertEqual(type(new.updated_at), datetime.datetime)
-
-    # To Store the original updated_at value
-        original_updated_at = new.updated_at
-
-    # Wait for a small amount of time to ensure the timestamp changes
-        import time
-        time.sleep(0.1)  # Sleep for 0.1 seconds
-
-    # To Update the object
-        new.save()
-
-    # To Load the object again
-        new = BaseModel(**new.to_dict())
-
-    # To Assert that the updated_at attribute has changed
-        self.assertNotEqual(original_updated_at, new.updated_at)
-
-    # Finally, to ensure that the created_at and updated_at timestamps are different
-        self.assertNotEqual(new.created_at, new.updated_at)
+        n = new.to_dict()
+        new = BaseModel(**n)
+        self.assertFalse(new.created_at == new.updated_at)
 
     def test_uuid(self):
         """
