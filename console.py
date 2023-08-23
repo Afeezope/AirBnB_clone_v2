@@ -130,10 +130,8 @@ class HBNBCommand(cmd.Cmd):
             if value[0] == '"':
                 value = new[2].replace('_', ' ')
                 value = new[2].strip('"')
-            elif '.' in new[2]:
-                value = float(new[2])
-            else:
-                value = int(new[2])
+            if new[0] in HBNBCommand.types:
+                value = HBNBCommand.types[new[0]](value)
             setattr(new_instance, new[0], value)
         new_instance.save()
         print(new_id)
